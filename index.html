@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TCM Remembers 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Montserrat:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: dark cinema header with production slate, sticky left nav, stacked call-sheet sections. Edit data in the P object below. */
+:root {
+  --paper: #0b0b0c; --sheet: #141416; --raise: #1b1b1e; --ink: #ece6d8; --muted: #9b968c; --rule: #2a2a2e;
+  --accent: #e2c58f; --accent-soft: #2a2419; --wine: #8a3352; --wine-soft: #2b1820;
+  --ok: #6fd294; --ok-bg: #163021; --warn: #f0b955; --warn-bg: #352812; --tbd: #a7a29a; --tbd-bg: #232326;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-label: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font: 15px/1.6 var(--font-body); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+header.top { border-bottom: 1px solid var(--rule); background: radial-gradient(ellipse 60% 120% at 50% -20%, rgba(226,197,143,.16), transparent 60%), var(--paper); }
+.top-inner { max-width: 1180px; margin: 0 auto; padding: 44px 20px 26px; display: grid; gap: 18px; }
+.eyebrow { font: 600 11px/1 var(--font-label); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+.brand { display: grid; gap: 2px; }
+.brand .tcm { font: 800 22px/1 var(--font-display); letter-spacing: .02em; }
+h1 { font: 800 clamp(40px, 7vw, 76px)/0.95 var(--font-display); letter-spacing: .01em; text-transform: uppercase; }
+.year { font: 500 14px/1 var(--font-label); letter-spacing: .6em; color: var(--muted); margin-top: 8px; }
+.lede { color: var(--muted); max-width: 64ch; margin: 0; }
+.slate { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; margin: 0; }
+.slate div { padding: 12px 14px; border-right: 1px solid var(--rule); background: var(--sheet); }
+.slate div:last-child { border-right: 0; }
+.slate dt { font: 600 10px/1 var(--font-label); text-transform: uppercase; letter-spacing: .16em; color: var(--muted); margin-bottom: 7px; }
+.slate dd { margin: 0; font-weight: 600; }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 24px 20px 64px; display: grid; grid-template-columns: 190px 1fr; gap: 32px; align-items: start; }
+nav.side { position: sticky; top: 16px; display: grid; gap: 2px; }
+nav.side a { text-decoration: none; color: var(--muted); padding: 7px 10px; border-radius: 6px; font-weight: 500; font-size: 14px; display: flex; justify-content: space-between; }
+nav.side a span { font: 12px var(--font-mono); opacity: .7; }
+nav.side a:hover { background: var(--sheet); color: var(--ink); }
+nav.side a.on { background: var(--accent-soft); color: var(--accent); }
+main { display: grid; gap: 24px; min-width: 0; }
+
+section.card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 22px 22px 24px; scroll-margin-top: 16px; }
+.sec-head { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); }
+h2 { font: 600 13px/1 var(--font-label); letter-spacing: .24em; text-transform: uppercase; }
+h3 { font: 600 16px/1.3 var(--font-body); }
+.sec-note { color: var(--muted); font-size: 13px; }
+p { margin: 0; }
+
+.pill { display: inline-block; font: 500 11px/1 var(--font-mono); text-transform: uppercase; letter-spacing: .06em; padding: 5px 8px; border-radius: 99px; white-space: nowrap; }
+.pill.confirmed { color: var(--ok); background: var(--ok-bg); }
+.pill.hold { color: var(--warn); background: var(--warn-bg); }
+.pill.tbd { color: var(--tbd); background: var(--tbd-bg); }
+.placeholder { color: var(--muted); font-style: italic; }
+
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; font: 500 11px/1.2 var(--font-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: 0 12px 8px 0; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+tr.blockrow td { background: var(--accent-soft); padding: 9px 12px; border-bottom: 0; }
+tr.blockrow strong { color: var(--accent); margin-right: 10px; }
+tbody tr.blockrow:not(:first-child) td { border-top: 10px solid var(--sheet); }
+
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.box { border: 1px solid var(--rule); border-radius: 8px; padding: 14px; display: grid; gap: 8px; align-content: start; background: var(--raise); }
+.box p { font-size: 14px; }
+.callout { background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 6px; padding: 12px 14px; font-size: 14px; }
+.callout.wine { background: var(--wine-soft); border-left-color: var(--wine); }
+.kv { display: grid; grid-template-columns: 100px 1fr; gap: 4px 10px; font-size: 14px; margin: 0; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; }
+.day-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.date { font: 500 13px var(--font-mono); color: var(--accent); }
+
+.theme { font: 700 clamp(19px, 2.3vw, 24px)/1.35 var(--font-display); max-width: 40ch; }
+.rule-line { font: 600 12px/1 var(--font-label); letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+
+/* Story timeline */
+.timeline { display: grid; gap: 0; }
+.beat { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.beat:last-child { border-bottom: 0; }
+.beat .tag { font: 600 10px/1.4 var(--font-label); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.beat .tag b { display: block; font: 800 26px/1 var(--font-display); color: var(--accent); letter-spacing: 0; margin-top: 4px; }
+.beat h3 { margin-bottom: 4px; }
+.beat .stars { color: var(--accent); font-size: 14px; font-weight: 500; }
+.beat ul { margin: 6px 0 0; padding-left: 18px; font-size: 14px; display: grid; gap: 3px; color: var(--ink); }
+.beat.studio { background: linear-gradient(90deg, var(--accent-soft), transparent 70%); margin: 0 -22px; padding-left: 22px; padding-right: 22px; }
+.quote { font: italic 600 16px/1.45 var(--font-display); color: var(--ink); border-left: 2px solid var(--wine); padding-left: 12px; margin: 8px 0 0; }
+
+/* LED wall diagram */
+.wall { display: grid; grid-template-columns: 2048fr 5120fr 2048fr; gap: 3px; margin: 6px 0 8px; }
+.wall div { aspect-ratio: auto; padding: 18px 10px; text-align: center; border-radius: 4px; font: 500 12px/1.3 var(--font-mono); }
+.wall .side { background: #17363a; color: #8ce9ef; }
+.wall .back { background: #3a1c33; color: #f4a6dc; }
+.wall small { display: block; opacity: .7; font-size: 11px; }
+.wall-total { display: flex; justify-content: space-between; font: 500 12px var(--font-mono); color: var(--muted); border-top: 1px dashed var(--rule); padding-top: 6px; }
+
+.media-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.shot { margin: 0; padding: 0; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: #000; cursor: zoom-in; text-align: left; color: inherit; font: inherit; }
+.shot img { width: 100%; aspect-ratio: 4/3; object-fit: contain; display: block; transition: transform .25s; }
+.shot:hover img { transform: scale(1.03); }
+.shot span { display: block; padding: 8px 10px; font: 500 12px var(--font-mono); color: var(--muted); background: var(--raise); border-top: 1px solid var(--rule); }
+
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.tabs button { font: 500 13px var(--font-body); border: 1px solid var(--rule); background: transparent; color: var(--muted); padding: 6px 12px; border-radius: 99px; cursor: pointer; }
+.tabs button[aria-pressed="true"] { background: var(--accent); color: #111; border-color: var(--accent); }
+.face { display: inline-block; font: 500 11px/1 var(--font-mono); padding: 4px 7px; border-radius: 4px; white-space: nowrap; }
+.face.both { background: var(--wine-soft); color: #e7a3bc; }
+.face.primary { background: var(--tbd-bg); color: var(--tbd); }
+
+.refgrid .shot img { object-fit: cover; aspect-ratio: 16/10; }
+.cam-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; align-items: start; }
+@media (max-width: 820px) { .cam-grid { grid-template-columns: 1fr; } }
+.shot.equip { background: #fff; max-width: 420px; }
+.shot.equip img { object-fit: contain; background: #fff; }
+.shot.plan { display: block; width: 100%; background: #fff; }
+.shot.plan img { aspect-ratio: auto; max-height: 560px; object-fit: contain; background: #fff; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.stat { font: 800 26px/1.1 var(--font-display); color: var(--accent); font-variant-numeric: tabular-nums; }
+.lightbox img { background: #fff; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 13px; border: 1px solid var(--rule); border-radius: 99px; padding: 4px 10px; }
+.docs { display: grid; gap: 8px; }
+.doc { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--rule); border-radius: 8px; background: var(--raise); }
+.doc strong { display: block; font-weight: 600; }
+.doc small { color: var(--muted); }
+.qs { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 14px; }
+
+.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.94); display: grid; grid-template-columns: 56px 1fr 56px; align-items: center; z-index: 50; padding: 24px 8px; }
+.lightbox[hidden] { display: none; }
+.lightbox figure { margin: 0; display: grid; gap: 10px; justify-items: center; min-width: 0; }
+.lightbox img { max-width: 100%; max-height: calc(100vh - 110px); border-radius: 6px; }
+.lightbox figcaption { color: #cfc8b8; font: 13px var(--font-mono); }
+.lb-nav, .lb-x { background: transparent; border: 0; color: #fff; font-size: 40px; line-height: 1; cursor: pointer; padding: 8px; }
+.lb-x { position: absolute; top: 8px; right: 12px; font-size: 34px; }
+footer { color: var(--muted); font-size: 13px; text-align: center; padding: 0 20px 40px; }
+
+@media (max-width: 820px) {
+  .wrap { grid-template-columns: 1fr; gap: 16px; }
+  nav.side { position: static; display: flex; overflow-x: auto; gap: 4px; padding-bottom: 4px; }
+  nav.side a { white-space: nowrap; }
+  nav.side a span { display: none; }
+  section.card { padding: 18px 16px 20px; }
+  .beat { grid-template-columns: 1fr; gap: 6px; }
+  .beat.studio { margin: 0 -16px; padding-left: 16px; padding-right: 16px; }
+  .wall div { padding: 12px 4px; font-size: 10px; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="eyebrow">Production hub · LED volume shoot</div>
+    <div class="brand">
+      <span class="tcm">TCM</span>
+      <h1>Remembers</h1>
+      <div class="year">2026</div>
+    </div>
+    <p class="lede">The annual in-memoriam spot, shot on the Studio C LED wall around a full-scale replica of the switch Ted Turner flipped to launch TCM in 1994. Eight chapters of honorees, one hero prop that's always on. Anything marked TBD is still being confirmed.</p>
+    <dl class="slate" id="slate"></dl>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="side" id="nav" aria-label="Sections"></nav>
+  <main id="main"></main>
+</div>
+
+<footer id="footer"></footer>
+
+<script>
+/* ============================================================
+   EDIT PRODUCTION INFO HERE. Status values: "confirmed", "hold", "tbd"
+   ============================================================ */
+const P = {
+  updated: "Nov 10, 2026",
+  slate: [
+    ["Client", "TCM"],
+    ["Director", "David Byrne"],
+    ["Producer", "Mario Rials"],
+    ["DP", "Pete Wages"],
+    ["Location", "Techwood Studios, Studio C"],
+    ["Pre-light", "Wed, Nov 18"],
+    ["Shoot date", "Thu, Nov 19"],
+    ["Hero prop", "The TCM Switch"]
+  ],
+  theme: "Thousands of flickers joining into a flame that never goes out. Still shining. Still inspiring. Still guiding us home.",
+  themeBody: "Ted Turner's 1994 switch-flip was the spark; the stars and storytellers who passed this year are the light that endures. Their individual lights have dimmed, but together they become a beacon fans can turn toward in grief.",
+  concept: "A to-scale reproduction of the TCM switch is the central hero of the shoot, never just set dressing. It stays front and center in every setup, and it stays switched on.",
+  deliverables: [
+    ["TCM Remembers 2026 spot (primary Switch face)", "Video", "tbd"],
+    ["Alternate ending, TCM Remembers Angel face", "Video", "tbd"],
+    ["LED wall content: archival open, 8 chapter mosaics, ending mosaic", "Playback content", "tbd"],
+    ["TCM Remembers title treatment", "Graphics", "tbd"]
+  ],
+  days: [
+    { name: "Pre-light", date: "Wed, Nov 18, 2026", status: "confirmed", call: "8:00 AM", loc: "Techwood Studios, Studio C · Gate #2", notes: "Assemble the Switch. Light the Switch, spotlight and practicals; load and test the 9216×2048 wall content for each chapter." },
+    { name: "Shoot day", date: "Thu, Nov 19, 2026", status: "confirmed", call: "8:00 AM", loc: "Techwood Studios, Studio C · Gate #2", notes: "Full pass with the primary Switch face, then repeat setups with the alternate Angel face." }
+  ],
+  story: [
+    { tag: "Open", n: "", studio: true, title: "Times Square, 1994", stars: "Ted Turner · Ann Blyth",
+      points: ["LED wall fills Studio C with archival images and footage of the TCM launch.",
+               "Camera slowly pulls back to reveal the Switch in the foreground. Still on.",
+               "Ted Turner's words carry us from the launch into the legacy.",
+               "Wall fills with Ann Blyth and her line, then the studio falls away into full-screen clips: a wave of stars."],
+      quotes: ["“I wanted to do something that was interesting, challenging, exciting... and that’s what I’ve done.” (Ted Turner)",
+               "“I’ve never had anyone like you. You’ve changed my whole life for me.” (Ann Blyth)"] },
+    { tag: "Chapter", n: "1", title: "Taking Flight", stars: "Bud Cort" },
+    { tag: "Chapter", n: "2", title: "Searching the Cosmos", stars: "Patrick Stewart" },
+    { tag: "Chapter", n: "3", title: "Reaching the Great Beyond", stars: "TBD" },
+    { tag: "Chapter", n: "4", title: "Singing the Most Beautiful Song", stars: "Dolly Parton", points: ["Deck example: stills fill the periphery while film clips come alive toward the center, pulling the eye to one moment that ties to the larger story."] },
+    { tag: "Chapter", n: "5", title: "The Entertainers", stars: "Catherine O’Hara" },
+    { tag: "Chapter", n: "6", title: "The Filmmakers", stars: "Frederick Wiseman" },
+    { tag: "Chapter", n: "7", title: "Fighting the Fight", stars: "Sam Neill" },
+    { tag: "Chapter", n: "8", title: "Meaning of Life", stars: "Eva Marie Saint & Tim Curry" },
+    { tag: "End", n: "", studio: true, title: "One light remains", stars: "Robert Duvall, then all honorees",
+      points: ["A moment with Robert Duvall opens up across the entire wall: stars and filmmakers appear and join into one living mosaic.",
+               "One by one the images fade to darkness, until only the Switch is lit.",
+               "Its light cuts through the dark as TCM Remembers appears. The Switch never dims, never fades."] },
+    { tag: "Alt end", n: "", studio: true, title: "The TCM Remembers Angel", stars: "Alternate Switch face",
+      points: ["A second Switch face built for TCM Remembers, carrying the original TCM Angel to tie back to the earliest TCM Remembers pieces.",
+               "After the primary pass, repeat the setups with this face for an additional option in the edit."] }
+  ],
+  chapterNote: "Each chapter is a return to Studio C, about :20 long, bringing one to three stars into focus before giving way to the movies again. Chapter order and pairings may shift as the story finds its rhythm in the edit.",
+  setupGroups: {
+    "Opening": [
+      ["01", "Slow pull-back from the LED wall (Times Square 1994 archival) to reveal the Switch in the foreground", "Wide → reveal", "both"],
+      ["02", "Ann Blyth across the full Studio C canvas, Switch in frame", "Wide", "both"]
+    ],
+    "Chapters 1–8": [
+      ["03", "Sweeping wide: full environment, chapter mosaic across all three walls", "Wide", "both"],
+      ["04", "Intimate composition closer to the imagery at the center of the mosaic", "Medium / close", "both"],
+      ["05", "Dolly alongside the Switch in the foreground, using it to reveal faces, films and memories on the wall", "Dolly move", "both"],
+      ["06", "Long-lens shot down the length of the wall past the practical fixtures", "Wide", "both"]
+    ],
+    "Ending": [
+      ["07", "Robert Duvall moment opening into the full-wall mosaic of all honorees", "Wide", "both"],
+      ["08", "Images fade out one by one until the Switch is the last light", "Wide → Switch", "both"],
+      ["09", "Spotlit Switch alone in darkness, hold for the TCM Remembers title", "Medium", "both"]
+    ]
+  },
+  setupNote: "Working setup list drawn from the creative deck, not a locked shot list. Chapter setups (03–06) repeat for each of the eight chapters as each one calls for. Every setup is shot twice: primary Switch face, then the Angel face.",
+  wall: { back: [5120, 2048], side: [2048, 2048], total: [9216, 2048] },
+  setElements: [
+    ["TCM Switch replica", "To scale, the hero in every setup. Always in frame, always switched on."],
+    ["Spotlight", "Single overhead beam on the Switch; carries the ending when everything else goes dark."],
+    ["Practical light fixtures", "Vintage studio lights lining the edges of the set. Non-working, but they add dimension to wides and interest when shooting down the wall."],
+    ["Haze / smoke", "Hazers for depth and texture in the beam and across the space."]
+  ],
+  location: {
+    name: "Techwood Studios, Studio C",
+    address: ["237 10th Street NW", "Atlanta, GA 30318"],
+    maps: "https://maps.google.com/?q=237+10th+Street+NW,+Atlanta,+GA+30318",
+    entry: "All crew enter through Gate #2.",
+    parking: "Driving directions and parking map for Gate #2: security check-in, parking decks and extras entrance."
+  },
+  studio: {
+    about: "Studio C is half green screen and half LED wall, with an LED floor. It's an XR and VR space running Pixotope software.",
+    stats: [["9216×2048", "Wall, 36′ × 13.12′"], ["4608×1920", "Floor, 36′ × 15′"], ["1309 SF", "Green screen, 35 × 35 × 15′"], ["1841 SF", "Total floor space"]],
+    specs: [
+      ["Wall", "Unilumen 1.9 tiles with Megapixel processors using Camera Plus technology to show 4 individual wall images at once. 36′ × 13.12′ = 9216×2048 px."],
+      ["Floor", "Unilumen 3.9 tiles with Megapixel processors using Camera Plus technology. 36′ × 15′ = 4608×1920 px."],
+      ["Green screen", "35 × 35 × 15′ green screen area, 1309 SF of floor space."]
+    ],
+    delivery: [
+      ["Full wall takeover", ["9216×2048, 29.97 fps .mov", "9216×2048 raw image"]],
+      ["Per engine (thirds of the wall)", ["3072×2048, 29.97 fps .mov", "3072×2048 raw image"]]
+    ],
+    floorNote: "The studio diagram lists the floor at 2816×1152 px, but the written specs say 4608×1920. Confirm with the studio before building floor media."
+  },
+  refGroups: [
+    ["Theme & opening", [
+      ["img/ref/theme-1994-launch.jpg", "Ted Turner flipping the TCM switch, Times Square, 1994"],
+      ["img/ref/open-led-pullback.jpg", "Opening: archival launch footage on the LED wall as the camera pulls back"],
+      ["img/ref/open-turner-collage.jpg", "Opening: Ted Turner archival collage"],
+      ["img/ref/open-ann-blyth.jpg", "Opening: Ann Blyth, then the move into film clips"]
+    ]],
+    ["Chapters & LED mosaics", [
+      ["img/ref/canvas-layout.jpg", "Canvas layout: full 9216×2048 wall vs the 5120×2048 back wall"],
+      ["img/ref/ch2-cosmos.jpg", "Chapter 2, Searching the Cosmos: starship reference"],
+      ["img/ref/wall-mock-cosmos.jpg", "LED wall mosaic mockup: starship with honoree"],
+      ["img/ref/wall-mock-stewart.jpg", "LED wall mosaic mockup: Patrick Stewart chapter"],
+      ["img/ref/wall-mock-entertainers.jpg", "LED wall mosaic mockup: stills and film moments across the wall"],
+      ["img/ref/ch4-dolly.jpg", "Chapter 4: Dolly Parton still"]
+    ]],
+    ["Ending & title", [
+      ["img/ref/end-mosaic.jpg", "Ending: full-wall mosaic of honorees"],
+      ["img/ref/end-spotlight.jpg", "Ending: spotlight cutting through the darkness"],
+      ["img/ref/title-treatments.jpg", "Title treatments: clean vs image-filled lettering"]
+    ]],
+    ["Set lighting", [
+      ["img/ref/light-practicals.jpg", "Set lighting: vintage practicals framing the wall"],
+      ["img/ref/light-interview.jpg", "Set lighting: practical lamps and a warm key"]
+    ]]
+  ],
+  camera: {
+    body: "Sony FX9",
+    photo: ["img/camera-fx9.jpg", "Sony FX9 camera build, shown with a Zeiss Supreme Prime 100mm"],
+    equipment: [
+      ["Chapman Hybrid Dolly", "Dolly", "img/dolly-chapman-hybrid.jpg"]
+    ],
+    settings: [["Resolution", "UHD 3840×2160"], ["Frame rate", "23.98 fps"], ["Codec", "XAVC-I"], ["Gamma", "S-Log3"]]
+  },
+  images: [
+    ["img/switch-primary.jpg", "TCM Switch · primary face"],
+    ["img/switch-alt.jpg", "TCM Switch · Remembers color treatment"],
+    ["img/switch-alt-face.jpg", "Alternate face · TCM Remembers Angel"],
+    ["img/set-diagram.jpg", "Set plan · LED walls, Switch, spotlight, practicals"]
+  ],
+  content: [
+    ["Archival: Times Square 1994 TCM launch, images and footage", "Opening", "tbd"],
+    ["Ted Turner audio for the quote", "Opening", "tbd"],
+    ["Ann Blyth clip and line", "Opening", "tbd"],
+    ["Stills + film clips per honoree, sized for 9216×2048", "Chapters 1–8", "tbd"],
+    ["Robert Duvall moment", "Ending", "tbd"],
+    ["Full-honoree mosaic build with fade-out sequence", "Ending", "tbd"],
+    ["TCM Remembers title animation", "Ending", "tbd"],
+    ["Clip and image clearances", "All", "tbd"]
+  ],
+  crew: [
+    ["Direction", "Director", "David Byrne", "confirmed"],
+    ["Creative", "Designer", "Christopher Brooks", "confirmed"],
+    ["Direction", "1st AD", "JD Taylor", "confirmed"],
+    ["Production", "Producer", "Mario Rials", "confirmed"],
+    ["Production", "Production Coordinator", "Gwen Conway", "confirmed"],
+    ["Production", "PA", "Patricia Mejorada", "confirmed"],
+    ["Production", "PA", "Kat Rolader", "confirmed"],
+    ["Production", "PA", "Bradley Stull", "confirmed"],
+    ["Camera", "Director of Photography", "Pete Wages", "confirmed"],
+    ["Camera", "1st AC", "Carol Baldwin", "confirmed"],
+    ["Camera", "2nd AC", "Stephen Kirkpatrick", "confirmed"],
+    ["Lighting", "Lighting Director", "Lachlan Smith", "confirmed"],
+    ["Electric", "Gaffer", "Chris Sorel", "confirmed"],
+    ["Electric", "Best Boy Electric", "Greg Taylor", "confirmed"],
+    ["Grip", "Key Grip", "Mike Coskey", "confirmed"],
+    ["Grip", "Best Boy Grip", "Stephen Dragstedt", "confirmed"],
+    ["Art", "Production Designer", "LA Reagan-Barnes", "confirmed"],
+    ["Art", "Art Assistant", "TBD", "tbd"],
+    ["Virtual production", "LED wall / playback operator", "Kaitlin Khosravi", "confirmed"]
+  ],
+  questions: [
+    "Chapter 3 (Reaching the Great Beyond) has no honoree named yet.",
+    "Robert Duvall leads the ending but isn't in the chapter list. Is he a ninth beat, or part of Chapter 8?",
+    "Art Assistant still to be named.",
+    "Total runtime: eight chapters at :20 plus open and end runs past 2:40. Confirm the target length.",
+    "Title card treatment: clean lettering or image-filled lettering (both shown in the deck)."
+  ],
+  docs: [
+    ["TCM Remembers Creative Deck V2", "David Byrne · Canva · 18 pp · Nov 5, 2026", "confirmed"],
+    ["Honoree list (final)", "TCM", "tbd"],
+    ["Shot list", "Creative", "tbd"],
+    ["LED content / edit plan", "Post", "tbd"],
+    ["Call sheet", "Production", "tbd"]
+  ]
+};
+
+/* ---------- rendering ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const v = s => /\bTBD\b/.test(s) ? `<span class="placeholder">${esc(s)}</span>` : esc(s);
+const pill = s => `<span class="pill ${s}">${s === "tbd" ? "TBD" : s}</span>`;
+const table = (cols, rows) => `<div class="tbl-wrap"><table><thead><tr>${cols.map(c => `<th>${c}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+const allSetups = Object.values(P.setupGroups).flat();
+const fmt = n => n.toLocaleString("en-US");
+
+const sections = [
+  ["overview", "Overview", () => `
+    <div class="grid2" style="margin-bottom:18px">
+      <div class="box"><div class="eyebrow">Theme</div><p class="theme">${esc(P.theme)}</p><p>${esc(P.themeBody)}</p></div>
+      <div class="box"><div class="eyebrow">Concept</div><p>${esc(P.concept)}</p><div class="rule-line">Always front and center · Always switched on</div></div>
+    </div>
+    <h3 style="margin-bottom:8px">Deliverables</h3>
+    ${table(["Deliverable", "Type", "Status"], P.deliverables.map(d => [esc(d[0]), esc(d[1]), pill(d[2])]))}`],
+  ["schedule", "Schedule", () => `
+    <div class="grid2">${P.days.map(d => `
+      <div class="box">
+        <div class="day-top"><h3>${esc(d.name)}</h3>${pill(d.status)}</div>
+        <div class="date">${v(d.date)}</div>
+        <dl class="kv"><dt>Crew call</dt><dd class="mono">${v(d.call)}</dd><dt>Location</dt><dd>${v(d.loc)}</dd><dt>Notes</dt><dd>${v(d.notes)}</dd></dl>
+      </div>`).join("")}</div>`],
+  ["story", "Story", () => `
+    <p class="sec-note" style="margin:0 0 6px">${esc(P.chapterNote)}</p>
+    <div class="timeline">${P.story.map(b => `
+      <div class="beat${b.studio ? " studio" : ""}">
+        <div class="tag">${esc(b.tag)}${b.n ? `<b>${b.n}</b>` : ""}</div>
+        <div>
+          <h3>${esc(b.title)}</h3>
+          <div class="stars">${v(b.stars)}</div>
+          ${b.points ? `<ul>${b.points.map(p => `<li>${esc(p)}</li>`).join("")}</ul>` : ""}
+          ${b.quotes ? b.quotes.map(q => `<p class="quote">${esc(q)}</p>`).join("") : ""}
+        </div>
+      </div>`).join("")}</div>`],
+  ["references", "References", () => P.refGroups.map((g, gi) => `
+    <h3 style="margin:${gi ? 22 : 0}px 0 10px">${esc(g[0])}</h3>
+    <div class="media-row refgrid">${g[1].map((m, i) => `<button type="button" class="shot" data-set="ref${gi}" data-i="${i}" aria-label="Open ${esc(m[1])}"><img src="${m[0]}" alt="${esc(m[1])}" loading="lazy"><span>${esc(m[1])}</span></button>`).join("")}</div>`).join("") + `
+    <p class="sec-note" style="margin:14px 0 0">From the TCM Remembers Creative Deck V2. Switch renders and the set plan are under Set & LED wall. Click any image to enlarge.</p>`],
+  ["setups", "Setups", () => {
+    const keys = ["All", ...Object.keys(P.setupGroups)];
+    return `<div class="tabs" role="group" aria-label="Filter by section">${keys.map((k, i) => `<button type="button" data-g="${esc(k)}" aria-pressed="${i === 0}">${esc(k)}</button>`).join("")}</div>
+      <div id="su-body"></div>
+      <div class="callout" style="margin-top:14px">${esc(P.setupNote)}</div>`;
+  }],
+  ["location", "Location", () => `
+    <div class="grid2">
+      <div class="box">
+        <div class="eyebrow">Address</div>
+        <h3>${esc(P.location.name)}</h3>
+        <p>${P.location.address.map(esc).join("<br>")}</p>
+        <p><a href="${P.location.maps}" target="_blank" rel="noopener">Open in Maps ↗</a></p>
+      </div>
+      <div class="box">
+        <div class="eyebrow">Crew entry</div>
+        <h3>${esc(P.location.entry)}</h3>
+        <p class="sec-note">${esc(P.location.parking)}</p>
+      </div>
+    </div>
+    <h3 style="margin:20px 0 10px">Parking & directions</h3>
+    <button type="button" class="shot plan" data-set="maps" data-i="0" aria-label="Open parking map"><img src="img/parking-map.png" alt="Driving directions and parking map to Techwood Studios, Gate 2, with security check-in, parking decks and extras entrance" loading="lazy"><span>Parking map · Gate #2 · click to enlarge</span></button>`],
+  ["studio", "Studio", () => `
+    <p style="margin:0 0 16px;max-width:65ch">${esc(P.studio.about)}</p>
+    <div class="stats">${P.studio.stats.map(x => `<div class="box"><div class="stat">${esc(x[0])}</div><p class="sec-note">${esc(x[1])}</p></div>`).join("")}</div>
+    <h3 style="margin:20px 0 8px">LED specs</h3>
+    ${table(["", "Spec"], P.studio.specs.map(x => [`<strong>${esc(x[0])}</strong>`, esc(x[1])]))}
+    <h3 style="margin:20px 0 4px">File delivery</h3>
+    <p class="sec-note" style="margin:0 0 10px">For using the LED wall as a playback wall.</p>
+    <div class="grid2">${P.studio.delivery.map(d => `<div class="box"><h3>${esc(d[0])}</h3><ul class="seq">${d[1].map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div>
+    <h3 style="margin:20px 0 10px">Studio C LED measurements & resolutions</h3>
+    <button type="button" class="shot plan" data-set="maps" data-i="1" aria-label="Open Studio C LED diagram"><img src="img/studio-c-led-diagram.png" alt="Studio C LED wall and floor measurement diagrams" loading="lazy"><span>Back wall 5120×2048 · side walls 2048×2048 · click to enlarge</span></button>
+    <div class="callout wine" style="margin-top:14px">${esc(P.studio.floorNote)}</div>`],
+  ["set", "Set & LED wall", () => `
+    <h3 style="margin-bottom:6px">LED canvas</h3>
+    <div class="wall" role="img" aria-label="LED wall: two side walls of 2048 by 2048 and a back wall of 5120 by 2048, totaling 9216 by 2048">
+      <div class="side">Side wall<small>${fmt(P.wall.side[0])}×${fmt(P.wall.side[1])}</small></div>
+      <div class="back">Back wall<small>${fmt(P.wall.back[0])}×${fmt(P.wall.back[1])}</small></div>
+      <div class="side">Side wall<small>${fmt(P.wall.side[0])}×${fmt(P.wall.side[1])}</small></div>
+    </div>
+    <div class="wall-total"><span>Full canvas · 36′ × 13.12′</span><span>${fmt(P.wall.total[0])}×${fmt(P.wall.total[1])} px</span></div>
+    <p class="sec-note" style="margin:8px 0 20px">Content is built across the full width as a living mosaic: still photography toward the edges, film clips coming alive at the center.</p>
+    <h3 style="margin-bottom:8px">Set elements</h3>
+    ${table(["Element", "Notes"], P.setElements.map(e => [`<strong>${esc(e[0])}</strong>`, esc(e[1])]))}
+    <h3 style="margin:20px 0 10px">The Switch & set plan</h3>
+    <div class="media-row">${P.images.map((m, i) => `<button type="button" class="shot" data-set="set" data-i="${i}" aria-label="Open ${esc(m[1])}"><img src="${m[0]}" alt="${esc(m[1])}" loading="lazy"><span>${esc(m[1])}</span></button>`).join("")}</div>
+    <p class="sec-note" style="margin:10px 0 0">Lighting references (vintage practicals, spotlit look) are under <a href="#references">References</a>.</p>`],
+  ["content", "LED content", () => `
+    ${table(["Asset", "Used in", "Status"], P.content.map(c => [esc(c[0]), esc(c[1]), pill(c[2])]))}`],
+  ["camera", "Camera", () => `
+    <div class="cam-grid">
+      <button type="button" class="shot plan" data-set="cam" data-i="0" aria-label="Open camera photo"><img src="${P.camera.photo[0]}" alt="${esc(P.camera.photo[1])}" loading="lazy"><span>${esc(P.camera.photo[1])}</span></button>
+      <div class="box">
+        <div class="eyebrow">Camera</div>
+        <h3 style="font:800 28px/1.1 var(--font-display)">${esc(P.camera.body)}</h3>
+        <h3 style="margin-top:8px">Camera settings</h3>
+        <dl class="kv">${P.camera.settings.map(x => `<dt>${esc(x[0])}</dt><dd class="mono">${esc(x[1])}</dd>`).join("")}</dl>
+      </div>
+    </div>
+    <div class="sec-head" style="margin-top:28px"><h2>Camera Equipment</h2></div>
+    <div class="media-row">${P.camera.equipment.map((e, i) => `<button type="button" class="shot equip" data-set="equip" data-i="${i}" aria-label="Open ${esc(e[0])} photo"><img src="${e[2]}" alt="${esc(e[0])}" loading="lazy"><span><strong style="color:var(--ink);font-family:var(--font-body)">${esc(e[0])}</strong> · ${esc(e[1])}</span></button>`).join("")}</div>`],
+  ["crew", "Crew", () => `
+    ${table(["Dept", "Role", "Who", "Status"], P.crew.map(c => [esc(c[0]), esc(c[1]), v(c[2]), pill(c[3])]))}`],
+  ["questions", "Open questions", () => `
+    <div class="callout wine"><ol class="qs">${P.questions.map(q => `<li>${esc(q)}</li>`).join("")}</ol></div>`],
+  ["documents", "Documents", () => `
+    <div class="docs">${P.docs.map(d => `<div class="doc"><div><strong>${esc(d[0])}</strong><small>${esc(d[1])}</small></div>${d[2] === "confirmed" ? '<span class="pill confirmed">Received</span>' : '<span class="pill tbd">Pending</span>'}</div>`).join("")}</div>`]
+];
+
+document.getElementById("slate").innerHTML = P.slate.map(([k, val]) => `<div><dt>${esc(k)}</dt><dd>${v(val)}</dd></div>`).join("");
+const counts = { story: 8, references: P.refGroups.reduce((n, g) => n + g[1].length, 0), crew: P.crew.length, setups: allSetups.length, questions: P.questions.length, documents: P.docs.length };
+document.getElementById("nav").innerHTML = sections.map(([id, label]) => `<a href="#${id}" data-id="${id}">${label}${counts[id] ? `<span>${counts[id]}</span>` : ""}</a>`).join("");
+document.getElementById("main").innerHTML = sections.map(([id, label, fn]) => `
+  <section class="card" id="${id}">
+    <div class="sec-head"><h2>${label}</h2></div>
+    ${fn()}
+  </section>`).join("");
+document.getElementById("footer").textContent = `Last updated ${P.updated} · Sources: TCM Remembers Creative Deck V2 (David Byrne, Christian Hammann); location and studio specs from the TCM Wine Club 2026 production site.`;
+
+let suG = "All";
+function renderSetups() {
+  let body = "";
+  Object.entries(P.setupGroups).filter(([g]) => suG === "All" || g === suG).forEach(([g, list]) => {
+    body += `<tr class="blockrow"><td colspan="4"><strong>${esc(g)}</strong><span class="sec-note">${list.length} setup${list.length > 1 ? "s" : ""}</span></td></tr>`;
+    list.forEach(s => body += `<tr><td class="mono">${s[0]}</td><td>${esc(s[1])}</td><td style="white-space:nowrap">${esc(s[2])}</td><td><span class="face ${s[3]}">${s[3] === "both" ? "Both faces" : "Primary"}</span></td></tr>`);
+  });
+  document.getElementById("su-body").innerHTML = `<div class="tbl-wrap"><table><thead><tr>${["#", "Setup", "Framing", "Switch"].map(c => `<th>${c}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table></div>`;
+  document.querySelectorAll("#setups [data-g]").forEach(b => b.setAttribute("aria-pressed", b.dataset.g === suG));
+}
+document.querySelectorAll("#setups [data-g]").forEach(b => b.addEventListener("click", () => { suG = b.dataset.g; renderSetups(); }));
+renderSetups();
+
+const lb = document.createElement("div");
+lb.className = "lightbox"; lb.hidden = true;
+lb.innerHTML = '<button type="button" class="lb-x" aria-label="Close">×</button><button type="button" class="lb-nav lb-prev" aria-label="Previous">‹</button><figure><img alt=""><figcaption></figcaption></figure><button type="button" class="lb-nav lb-next" aria-label="Next">›</button>';
+document.body.appendChild(lb);
+const galleries = {
+  set: P.images,
+  ...Object.fromEntries(P.refGroups.map((g, gi) => ["ref" + gi, g[1]])),
+  cam: [P.camera.photo],
+  equip: P.camera.equipment.map(e => [e[2], e[0]]),
+  maps: [["img/parking-map.png", "Parking map · Gate #2"], ["img/studio-c-led-diagram.png", "Studio C LED measurements & resolutions"]]
+};
+let lbI = 0, lbSet = "set";
+function showLB() {
+  const list = galleries[lbSet], n = list.length; lbI = (lbI + n) % n;
+  lb.querySelector("img").src = list[lbI][0];
+  lb.querySelector("img").alt = list[lbI][1];
+  lb.querySelector("figcaption").textContent = `${list[lbI][1]} · ${lbI + 1} of ${n}`;
+  lb.hidden = false;
+}
+document.getElementById("main").addEventListener("click", e => {
+  const b = e.target.closest(".shot"); if (!b) return;
+  lbSet = b.dataset.set; lbI = +b.dataset.i; showLB(); lb.querySelector(".lb-x").focus();
+});
+lb.querySelector(".lb-x").onclick = () => { lb.hidden = true; };
+lb.querySelector(".lb-prev").onclick = () => { lbI--; showLB(); };
+lb.querySelector(".lb-next").onclick = () => { lbI++; showLB(); };
+lb.addEventListener("click", e => { if (e.target === lb) lb.hidden = true; });
+document.addEventListener("keydown", e => {
+  if (lb.hidden) return;
+  if (e.key === "Escape") lb.hidden = true;
+  if (e.key === "ArrowLeft") { lbI--; showLB(); }
+  if (e.key === "ArrowRight") { lbI++; showLB(); }
+});
+
+function markNav() {
+  const id = location.hash.slice(1) || "overview";
+  document.querySelectorAll("nav.side a").forEach(a => a.classList.toggle("on", a.dataset.id === id));
+  const el = document.getElementById(id);
+  if (location.hash && el) el.scrollIntoView();
+}
+window.addEventListener("hashchange", markNav);
+markNav();
+</script>
+</body>
+</html>
