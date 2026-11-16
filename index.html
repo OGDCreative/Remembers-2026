@@ -115,10 +115,23 @@ tbody tr.blockrow:not(:first-child) td { border-top: 10px solid var(--sheet); }
 .tabs button { font: 500 13px var(--font-body); border: 1px solid var(--rule); background: transparent; color: var(--muted); padding: 6px 12px; border-radius: 99px; cursor: pointer; }
 .tabs button[aria-pressed="true"] { background: var(--accent); color: #111; border-color: var(--accent); }
 .face { display: inline-block; font: 500 11px/1 var(--font-mono); padding: 4px 7px; border-radius: 4px; white-space: nowrap; }
-.face.both { background: var(--wine-soft); color: #e7a3bc; }
-.face.primary { background: var(--tbd-bg); color: var(--tbd); }
+.face.switch { background: var(--accent-soft); color: var(--accent); }
+.face.angel { background: var(--wine-soft); color: #e7a3bc; }
+.face-note { font-size: 12px; color: var(--muted); margin-top: 5px; max-width: 24ch; }
+tr.swaprow td { box-shadow: inset 0 2px 0 var(--wine); }
+.sl-head { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.refs-label { font: 500 11px/1 var(--font-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 8px; }
+.facestrip-wrap { margin-bottom: 16px; }
+.facestrip { display: grid; grid-template-columns: repeat(13, 1fr); gap: 3px; }
+.fs { display: inline-block; text-align: center; font: 500 11px/1 var(--font-mono); padding: 8px 0; border-radius: 3px; }
+.fs.switch { background: var(--accent-soft); color: var(--accent); }
+.fs.angel { background: var(--wine-soft); color: #e7a3bc; }
+.fs.swap { outline: 2px solid var(--wine); outline-offset: -2px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; color: var(--muted); }
+.legend i { width: 14px; height: 10px; padding: 0; margin-right: 6px; vertical-align: middle; }
 
 .refgrid .shot img { object-fit: cover; aspect-ratio: 16/10; }
+.cam-side { display: grid; gap: 14px; align-content: start; }
 .cam-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; align-items: start; }
 @media (max-width: 820px) { .cam-grid { grid-template-columns: 1fr; } }
 .shot.equip { background: #fff; max-width: 420px; }
@@ -185,10 +198,10 @@ footer { color: var(--muted); font-size: 13px; text-align: center; padding: 0 20
    EDIT PRODUCTION INFO HERE. Status values: "confirmed", "hold", "tbd"
    ============================================================ */
 const P = {
-  updated: "Nov 10, 2026",
+  updated: "Nov 16, 2026",
   slate: [
     ["Client", "TCM"],
-    ["Director", "David Byrne"],
+    ["Directors", "David Byrne · Christian Hammann"],
     ["Producer", "Mario Rials"],
     ["DP", "Pete Wages"],
     ["Location", "Techwood Studios, Studio C"],
@@ -201,8 +214,9 @@ const P = {
   concept: "A to-scale reproduction of the TCM switch is the central hero of the shoot, never just set dressing. It stays front and center in every setup, and it stays switched on.",
   deliverables: [
     ["TCM Remembers 2026 spot (primary Switch face)", "Video", "tbd"],
-    ["Alternate ending, TCM Remembers Angel face", "Video", "tbd"],
-    ["LED wall content: archival open, 8 chapter mosaics, ending mosaic", "Playback content", "tbd"],
+    ["Three alternate endings (logo or clean backplate; TCM Switch or Angel face)", "Video", "tbd"],
+    ["B-roll: Switch detail shots, BEAM and BOKEH wall sequences", "Video", "tbd"],
+    ["LED wall content: open, 7 chapter mosaics, ending + alternates, b-roll", "Playback content", "tbd"],
     ["TCM Remembers title treatment", "Graphics", "tbd"]
   ],
   days: [
@@ -217,41 +231,44 @@ const P = {
                "Wall fills with Ann Blyth and her line, then the studio falls away into full-screen clips: a wave of stars."],
       quotes: ["“I wanted to do something that was interesting, challenging, exciting... and that’s what I’ve done.” (Ted Turner)",
                "“I’ve never had anyone like you. You’ve changed my whole life for me.” (Ann Blyth)"] },
-    { tag: "Chapter", n: "1", title: "Taking Flight", stars: "Bud Cort" },
-    { tag: "Chapter", n: "2", title: "Searching the Cosmos", stars: "Patrick Stewart" },
-    { tag: "Chapter", n: "3", title: "Reaching the Great Beyond", stars: "TBD" },
-    { tag: "Chapter", n: "4", title: "Singing the Most Beautiful Song", stars: "Dolly Parton", points: ["Deck example: stills fill the periphery while film clips come alive toward the center, pulling the eye to one moment that ties to the larger story."] },
-    { tag: "Chapter", n: "5", title: "The Entertainers", stars: "Catherine O’Hara" },
-    { tag: "Chapter", n: "6", title: "The Filmmakers", stars: "Frederick Wiseman" },
-    { tag: "Chapter", n: "7", title: "Fighting the Fight", stars: "Sam Neill" },
-    { tag: "Chapter", n: "8", title: "Meaning of Life", stars: "Eva Marie Saint & Tim Curry" },
+    { tag: "Chapter", n: "1", title: "Taking Flight", stars: "Joy Harmon · Bud Cort · Dragonslayer" },
+    { tag: "Chapter", n: "2", title: "Searching the Cosmos", stars: "2001 · Star Trek · Patrick Stewart · Star Wars" },
+    { tag: "Chapter", n: "3", title: "Singing the Most Beautiful Song", stars: "Glenn Hansard · Dolly Parton · Starry Sky", points: ["Deck example: stills fill the periphery while film clips come alive toward the center, pulling the eye to one moment that ties to the larger story."] },
+    { tag: "Chapter", n: "4", title: "The Entertainers", stars: "Robin Hood · Catherine O’Hara · Garrett Graham · Tim Curry" },
+    { tag: "Chapter", n: "5", title: "The Filmmakers", stars: "Photos: Rex Reed · Gene Shalit · Judith Wyler Sheldon · John Bengston · Casey Lalonde. Video: Fred Wiseman" },
+    { tag: "Chapter", n: "6", title: "Fighting the Fight", stars: "Terminator 2 · Sam Neill · Tom Skeritt · Mary Beth Hurt" },
+    { tag: "Chapter", n: "7", title: "Meaning of Life", stars: "Christa Lang · Keiko Keisha · Eva Marie Saint · Robert Duvall", points: ["May roll straight into the Ending as one video element for a seamless transition from Robert Duvall."] },
     { tag: "End", n: "", studio: true, title: "One light remains", stars: "Robert Duvall, then all honorees",
       points: ["A moment with Robert Duvall opens up across the entire wall: stars and filmmakers appear and join into one living mosaic.",
                "One by one the images fade to darkness, until only the Switch is lit.",
                "Its light cuts through the dark as TCM Remembers appears. The Switch never dims, never fades."] },
-    { tag: "Alt end", n: "", studio: true, title: "The TCM Remembers Angel", stars: "Alternate Switch face",
-      points: ["A second Switch face built for TCM Remembers, carrying the original TCM Angel to tie back to the earliest TCM Remembers pieces.",
-               "After the primary pass, repeat the setups with this face for an additional option in the edit."] }
+    { tag: "Alt ends", n: "", studio: true, title: "Three alternate endings", stars: "Logo or clean backplate · TCM Switch or TCM Remembers Angel face",
+      points: ["Alt #1: Robert Duvall, photo wall, clean video backplate. TCM Switch face.",
+               "Alt #2: Robert Duvall, photo wall, TCM Remembers logo. TCM Remembers Angel face, which carries the original TCM Angel back to the earliest TCM Remembers pieces.",
+               "Alt #3: Robert Duvall, photo wall, clean backplate. TCM Remembers Angel face."] }
   ],
-  chapterNote: "Each chapter is a return to Studio C, about :20 long, bringing one to three stars into focus before giving way to the movies again. Chapter order and pairings may shift as the story finds its rhythm in the edit.",
-  setupGroups: {
-    "Opening": [
-      ["01", "Slow pull-back from the LED wall (Times Square 1994 archival) to reveal the Switch in the foreground", "Wide → reveal", "both"],
-      ["02", "Ann Blyth across the full Studio C canvas, Switch in frame", "Wide", "both"]
-    ],
-    "Chapters 1–8": [
-      ["03", "Sweeping wide: full environment, chapter mosaic across all three walls", "Wide", "both"],
-      ["04", "Intimate composition closer to the imagery at the center of the mosaic", "Medium / close", "both"],
-      ["05", "Dolly alongside the Switch in the foreground, using it to reveal faces, films and memories on the wall", "Dolly move", "both"],
-      ["06", "Long-lens shot down the length of the wall past the practical fixtures", "Wide", "both"]
-    ],
-    "Ending": [
-      ["07", "Robert Duvall moment opening into the full-wall mosaic of all honorees", "Wide", "both"],
-      ["08", "Images fade out one by one until the Switch is the last light", "Wide → Switch", "both"],
-      ["09", "Spotlit Switch alone in darkness, hold for the TCM Remembers title", "Medium", "both"]
+  chapterNote: "Seven chapters per Shot List V1 (11/13/26), each a return to Studio C bringing one to three stars into focus before giving way to the movies again. Chapter titles carry over from the creative deck, matched to their honorees.",
+  shotList: {
+    version: "V1",
+    date: "11/13/26",
+    note: "Listed in shooting order. Each row is one LED wall video element; the Switch sits in the foreground throughout.",
+    faces: { switch: "TCM Switch", angel: "TCM Remembers Angel" },
+    shots: [
+      { sec: "Open", title: "Open · “Chapter 00”", wall: ["Ted Turner", "Ann Blyth"], notes: "Aiming for a pull-back reveal to the TCM Switch in the foreground.", face: "switch", faceNote: "Not named in the shot list; assumed TCM Switch" },
+      { sec: "Ending", title: "Ending", wall: ["Robert Duvall", "Photo Wall", "TCM Remembers Logo"], face: "switch" },
+      { sec: "Ending", title: "Ending Alt #1", wall: ["Robert Duvall", "Photo Wall", "Clean Video Backplate"], face: "switch" },
+      { sec: "Ending", title: "Ending Alt #2", wall: ["Robert Duvall", "Photo Wall", "TCM Remembers Logo"], face: "angel", faceNote: "Swap: TCM Switch out, TCM Remembers Angel in", swap: true },
+      { sec: "Ending", title: "Ending Alt #3", wall: ["Robert Duvall", "Photo Wall", "Clean Backplate"], face: "angel" },
+      { sec: "Chapters", title: "Chapter 7", wall: ["Christa Lang", "Keiko Keisha", "Eva Marie Saint", "Robert Duvall"], notes: "May be married to the beginning of the Ending video for a more seamless transition from Robert Duvall. If so, Chapter 7 is captured rolling into the Ending as one video element.", face: "angel", faceNote: "Not named; Angel still on from Ending Alt #3" },
+      { sec: "Chapters", title: "Chapter 1", wall: ["Joy Harmon", "Bud Cort", "Dragonslayer"], face: "switch", faceNote: "Swap: Angel out, TCM Switch in. Angel face retires for the rest of the shoot.", swap: true },
+      { sec: "Chapters", title: "Chapter 2", wall: ["2001", "Star Trek", "Patrick Stewart", "Star Wars"], face: "switch" },
+      { sec: "Chapters", title: "Chapter 3", wall: ["Glenn Hansard", "Dolly Parton", "Starry Sky"], face: "switch" },
+      { sec: "Chapters", title: "Chapter 6", wall: ["Terminator 2", "Sam Neill", "Tom Skeritt", "Mary Beth Hurt"], face: "switch" },
+      { sec: "Chapters", title: "Chapter 4", wall: ["Robin Hood", "Catherine O’Hara", "Garrett Graham", "Tim Curry"], face: "switch" },
+      { sec: "Chapters", title: "Chapter 5", wall: ["Photo section: Rex Reed, Gene Shalit, Judith Wyler Sheldon, John Bengston, Casey Lalonde", "Video section: Fred Wiseman"], face: "switch" },
+      { sec: "B-Roll", title: "B-Roll", wall: ["BEAM sequence", "BOKEH sequence"], notes: "Time permitting at the end of the shoot day: tighter detail shots of the TCM Switch sign. Look for organic, magical moments to use as transitional and texture elements.", face: "switch" }
     ]
   },
-  setupNote: "Working setup list drawn from the creative deck, not a locked shot list. Chapter setups (03–06) repeat for each of the eight chapters as each one calls for. Every setup is shot twice: primary Switch face, then the Angel face.",
   wall: { back: [5120, 2048], side: [2048, 2048], total: [9216, 2048] },
   setElements: [
     ["TCM Switch replica", "To scale, the hero in every setup. Always in frame, always switched on."],
@@ -311,7 +328,12 @@ const P = {
     equipment: [
       ["Chapman Hybrid Dolly", "Dolly", "img/dolly-chapman-hybrid.jpg"]
     ],
-    settings: [["Resolution", "UHD 3840×2160"], ["Frame rate", "23.98 fps"], ["Codec", "XAVC-I"], ["Gamma", "S-Log3"]]
+    settings: [["Resolution", "UHD 3840×2160"], ["Frame rate", "23.98 fps"], ["Codec", "XAVC-I"], ["Gamma", "S-Log3"]],
+    workflow: [
+      ["LUT", "When recording LOG, apply a LUT to on-set viewing monitors only. Do not burn into footage or transcodes. Include the LUT on drives."],
+      ["Timecode", "TOD"],
+      ["Drives", "Formatted HFS+"]
+    ]
   },
   images: [
     ["img/switch-primary.jpg", "TCM Switch · primary face"],
@@ -323,19 +345,22 @@ const P = {
     ["Archival: Times Square 1994 TCM launch, images and footage", "Opening", "tbd"],
     ["Ted Turner audio for the quote", "Opening", "tbd"],
     ["Ann Blyth clip and line", "Opening", "tbd"],
-    ["Stills + film clips per honoree, sized for 9216×2048", "Chapters 1–8", "tbd"],
+    ["Stills + film clips per honoree, sized for 9216×2048", "Chapters 1–7", "tbd"],
     ["Robert Duvall moment", "Ending", "tbd"],
     ["Full-honoree mosaic build with fade-out sequence", "Ending", "tbd"],
     ["TCM Remembers title animation", "Ending", "tbd"],
+    ["Clean video backplate versions of the ending", "Ending alts", "tbd"],
+    ["BEAM and BOKEH b-roll sequences", "B-roll", "tbd"],
     ["Clip and image clearances", "All", "tbd"]
   ],
   crew: [
     ["Direction", "Director", "David Byrne", "confirmed"],
+    ["Direction", "Director", "Christian Hammann", "confirmed"],
     ["Creative", "Designer", "Christopher Brooks", "confirmed"],
     ["Direction", "1st AD", "JD Taylor", "confirmed"],
     ["Production", "Producer", "Mario Rials", "confirmed"],
     ["Production", "Production Coordinator", "Gwen Conway", "confirmed"],
-    ["Production", "PA", "Patricia Mejorada", "confirmed"],
+    ["Production", "PA", "Patricio Mejorada", "confirmed"],
     ["Production", "PA", "Kat Rolader", "confirmed"],
     ["Production", "PA", "Bradley Stull", "confirmed"],
     ["Camera", "Director of Photography", "Pete Wages", "confirmed"],
@@ -347,20 +372,19 @@ const P = {
     ["Grip", "Key Grip", "Mike Coskey", "confirmed"],
     ["Grip", "Best Boy Grip", "Stephen Dragstedt", "confirmed"],
     ["Art", "Production Designer", "LA Reagan-Barnes", "confirmed"],
-    ["Art", "Art Assistant", "TBD", "tbd"],
+    ["Art", "Art Assistant", "Jessie Simpson", "confirmed"],
     ["Virtual production", "LED wall / playback operator", "Kaitlin Khosravi", "confirmed"]
   ],
   questions: [
-    "Chapter 3 (Reaching the Great Beyond) has no honoree named yet.",
-    "Robert Duvall leads the ending but isn't in the chapter list. Is he a ninth beat, or part of Chapter 8?",
-    "Art Assistant still to be named.",
-    "Total runtime: eight chapters at :20 plus open and end runs past 2:40. Confirm the target length.",
+    "Open: the shot list doesn't name a sign face. The site assumes TCM Switch.",
+    "Chapter 7: confirm whether it's captured rolling straight into the Ending as one element.",
+    "Total runtime: seven chapters at :20 plus open and end runs past 2:20. Confirm the target length.",
     "Title card treatment: clean lettering or image-filled lettering (both shown in the deck)."
   ],
   docs: [
     ["TCM Remembers Creative Deck V2", "David Byrne · Canva · 18 pp · Nov 5, 2026", "confirmed"],
     ["Honoree list (final)", "TCM", "tbd"],
-    ["Shot list", "Creative", "tbd"],
+    ["TCM Remembers 2026 Shot List V1", "11/13/26 · 13 shots incl. open, ending + 3 alts, 7 chapters, b-roll", "confirmed"],
     ["LED content / edit plan", "Post", "tbd"],
     ["Call sheet", "Production", "tbd"]
   ]
@@ -371,7 +395,6 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;",
 const v = s => /\bTBD\b/.test(s) ? `<span class="placeholder">${esc(s)}</span>` : esc(s);
 const pill = s => `<span class="pill ${s}">${s === "tbd" ? "TBD" : s}</span>`;
 const table = (cols, rows) => `<div class="tbl-wrap"><table><thead><tr>${cols.map(c => `<th>${c}</th>`).join("")}</tr></thead><tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
-const allSetups = Object.values(P.setupGroups).flat();
 const fmt = n => n.toLocaleString("en-US");
 
 const sections = [
@@ -405,11 +428,15 @@ const sections = [
     <h3 style="margin:${gi ? 22 : 0}px 0 10px">${esc(g[0])}</h3>
     <div class="media-row refgrid">${g[1].map((m, i) => `<button type="button" class="shot" data-set="ref${gi}" data-i="${i}" aria-label="Open ${esc(m[1])}"><img src="${m[0]}" alt="${esc(m[1])}" loading="lazy"><span>${esc(m[1])}</span></button>`).join("")}</div>`).join("") + `
     <p class="sec-note" style="margin:14px 0 0">From the TCM Remembers Creative Deck V2. Switch renders and the set plan are under Set & LED wall. Click any image to enlarge.</p>`],
-  ["setups", "Setups", () => {
-    const keys = ["All", ...Object.keys(P.setupGroups)];
-    return `<div class="tabs" role="group" aria-label="Filter by section">${keys.map((k, i) => `<button type="button" data-g="${esc(k)}" aria-pressed="${i === 0}">${esc(k)}</button>`).join("")}</div>
-      <div id="su-body"></div>
-      <div class="callout" style="margin-top:14px">${esc(P.setupNote)}</div>`;
+  ["shot-list", "Shot list", () => {
+    const sl = P.shotList, secs = ["All", ...new Set(sl.shots.map(x => x.sec))];
+    const strip = sl.shots.map((x, i) => `<span class="fs ${x.face}${x.swap ? " swap" : ""}" title="${String(i + 1).padStart(2, "0")} ${esc(x.title)}: ${esc(sl.faces[x.face])}">${String(i + 1).padStart(2, "0")}</span>`).join("");
+    return `<div class="sl-head"><span class="pill confirmed">${esc(sl.version)} · ${esc(sl.date)}</span><span class="sec-note">${esc(sl.note)}</span></div>
+      <div class="facestrip-wrap"><div class="refs-label">Switch face by shot</div><div class="facestrip">${strip}</div>
+      <div class="legend"><span><i class="fs switch"></i>TCM Switch</span><span><i class="fs angel"></i>TCM Remembers Angel</span><span><i class="fs swap switch"></i>Face swap</span></div></div>
+      <div class="tabs" role="group" aria-label="Filter by section">${secs.map((k, i) => `<button type="button" data-g="${esc(k)}" aria-pressed="${i === 0}">${esc(k)}</button>`).join("")}</div>
+      <div class="tabs" role="group" aria-label="Filter by Switch face">${[["all", "All faces"], ["switch", "TCM Switch"], ["angel", "TCM Remembers Angel"]].map((f, i) => `<button type="button" data-f="${f[0]}" aria-pressed="${i === 0}">${f[1]}</button>`).join("")}<span class="sec-note" id="sl-count" style="align-self:center;margin-left:6px"></span></div>
+      <div id="sl-body"></div>`;
   }],
   ["location", "Location", () => `
     <div class="grid2">
@@ -457,11 +484,17 @@ const sections = [
   ["camera", "Camera", () => `
     <div class="cam-grid">
       <button type="button" class="shot plan" data-set="cam" data-i="0" aria-label="Open camera photo"><img src="${P.camera.photo[0]}" alt="${esc(P.camera.photo[1])}" loading="lazy"><span>${esc(P.camera.photo[1])}</span></button>
+      <div class="cam-side">
       <div class="box">
         <div class="eyebrow">Camera</div>
         <h3 style="font:800 28px/1.1 var(--font-display)">${esc(P.camera.body)}</h3>
         <h3 style="margin-top:8px">Camera settings</h3>
         <dl class="kv">${P.camera.settings.map(x => `<dt>${esc(x[0])}</dt><dd class="mono">${esc(x[1])}</dd>`).join("")}</dl>
+      </div>
+      <div class="box">
+        <h3>LUT, timecode & media</h3>
+        <dl class="kv">${P.camera.workflow.map(x => `<dt>${esc(x[0])}</dt><dd>${esc(x[1])}</dd>`).join("")}</dl>
+      </div>
       </div>
     </div>
     <div class="sec-head" style="margin-top:28px"><h2>Camera Equipment</h2></div>
@@ -475,27 +508,32 @@ const sections = [
 ];
 
 document.getElementById("slate").innerHTML = P.slate.map(([k, val]) => `<div><dt>${esc(k)}</dt><dd>${v(val)}</dd></div>`).join("");
-const counts = { story: 8, references: P.refGroups.reduce((n, g) => n + g[1].length, 0), crew: P.crew.length, setups: allSetups.length, questions: P.questions.length, documents: P.docs.length };
+const counts = { story: 7, references: P.refGroups.reduce((n, g) => n + g[1].length, 0), crew: P.crew.length, "shot-list": P.shotList.shots.length, questions: P.questions.length, documents: P.docs.length };
 document.getElementById("nav").innerHTML = sections.map(([id, label]) => `<a href="#${id}" data-id="${id}">${label}${counts[id] ? `<span>${counts[id]}</span>` : ""}</a>`).join("");
 document.getElementById("main").innerHTML = sections.map(([id, label, fn]) => `
   <section class="card" id="${id}">
     <div class="sec-head"><h2>${label}</h2></div>
     ${fn()}
   </section>`).join("");
-document.getElementById("footer").textContent = `Last updated ${P.updated} · Sources: TCM Remembers Creative Deck V2 (David Byrne, Christian Hammann); location and studio specs from the TCM Wine Club 2026 production site.`;
+document.getElementById("footer").textContent = `Last updated ${P.updated} · Sources: TCM Remembers Creative Deck V2 (David Byrne, Christian Hammann); Shot List V1 (11/13/26); location and studio specs from the TCM Wine Club 2026 production site.`;
 
-let suG = "All";
-function renderSetups() {
-  let body = "";
-  Object.entries(P.setupGroups).filter(([g]) => suG === "All" || g === suG).forEach(([g, list]) => {
-    body += `<tr class="blockrow"><td colspan="4"><strong>${esc(g)}</strong><span class="sec-note">${list.length} setup${list.length > 1 ? "s" : ""}</span></td></tr>`;
-    list.forEach(s => body += `<tr><td class="mono">${s[0]}</td><td>${esc(s[1])}</td><td style="white-space:nowrap">${esc(s[2])}</td><td><span class="face ${s[3]}">${s[3] === "both" ? "Both faces" : "Primary"}</span></td></tr>`);
+let slG = "All", slF = "all";
+function renderShots() {
+  const sl = P.shotList; let body = "", last = null, n = 0;
+  sl.shots.forEach((x, i) => {
+    if ((slG !== "All" && x.sec !== slG) || (slF !== "all" && x.face !== slF)) return;
+    n++;
+    if (x.sec !== last) { last = x.sec; body += `<tr class="blockrow"><td colspan="5"><strong>${esc(x.sec)}</strong></td></tr>`; }
+    body += `<tr${x.swap ? ' class="swaprow"' : ""}><td class="mono">${String(i + 1).padStart(2, "0")}</td><td><strong>${esc(x.title)}</strong></td><td><div class="chips">${x.wall.map(w => `<span class="chip">${esc(w)}</span>`).join("")}</div></td><td>${x.notes ? esc(x.notes) : '<span class="placeholder">—</span>'}</td><td><span class="face ${x.face}">${x.swap ? "⇄ " : ""}${esc(sl.faces[x.face])}</span>${x.faceNote ? `<div class="face-note">${esc(x.faceNote)}</div>` : ""}</td></tr>`;
   });
-  document.getElementById("su-body").innerHTML = `<div class="tbl-wrap"><table><thead><tr>${["#", "Setup", "Framing", "Switch"].map(c => `<th>${c}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table></div>`;
-  document.querySelectorAll("#setups [data-g]").forEach(b => b.setAttribute("aria-pressed", b.dataset.g === suG));
+  document.getElementById("sl-count").textContent = `${n} of ${sl.shots.length} shots`;
+  document.getElementById("sl-body").innerHTML = `<div class="tbl-wrap"><table><thead><tr>${["#", "Shot", "LED wall", "Notes", "Switch face"].map(c => `<th>${c}</th>`).join("")}</tr></thead><tbody>${body || '<tr><td colspan="5" class="placeholder">No shots match.</td></tr>'}</tbody></table></div>`;
+  document.querySelectorAll("#shot-list [data-g]").forEach(b => b.setAttribute("aria-pressed", b.dataset.g === slG));
+  document.querySelectorAll("#shot-list [data-f]").forEach(b => b.setAttribute("aria-pressed", b.dataset.f === slF));
 }
-document.querySelectorAll("#setups [data-g]").forEach(b => b.addEventListener("click", () => { suG = b.dataset.g; renderSetups(); }));
-renderSetups();
+document.querySelectorAll("#shot-list [data-g]").forEach(b => b.addEventListener("click", () => { slG = b.dataset.g; renderShots(); }));
+document.querySelectorAll("#shot-list [data-f]").forEach(b => b.addEventListener("click", () => { slF = b.dataset.f; renderShots(); }));
+renderShots();
 
 const lb = document.createElement("div");
 lb.className = "lightbox"; lb.hidden = true;
