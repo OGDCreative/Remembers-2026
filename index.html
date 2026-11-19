@@ -145,6 +145,8 @@ tr.swaprow td { box-shadow: inset 0 2px 0 var(--wine); }
 .stime small { display: block; color: var(--muted); font-size: 11px; margin-top: 3px; }
 .srow.swap .stime, .srow.swap .stime small { color: #e7a3bc; }
 .sthumb { padding: 0; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: #000; cursor: zoom-in; line-height: 0; }
+.sthumb.empty { display: grid; place-items: center; aspect-ratio: 16/9; cursor: default; color: var(--muted); font: 500 11px var(--font-mono); text-transform: uppercase; letter-spacing: .06em; line-height: 1.2; background: repeating-linear-gradient(45deg, transparent 0 10px, rgba(255,255,255,.03) 10px 20px); }
+.face.none { background: var(--tbd-bg); color: var(--tbd); }
 .sthumb img { width: 100%; aspect-ratio: 16/9; object-fit: contain; display: block; }
 .sbody p { font-size: 14px; color: var(--muted); }
 @media (max-width: 820px) { .srow, .srow.shoot { grid-template-columns: 1fr; } .sthumb { max-width: 320px; } }
@@ -215,7 +217,7 @@ footer { color: var(--muted); font-size: 13px; text-align: center; padding: 0 20
    EDIT PRODUCTION INFO HERE. Status values: "confirmed", "hold", "tbd"
    ============================================================ */
 const P = {
-  updated: "Nov 17, 2026",
+  updated: "Nov 19, 2026",
   slate: [
     ["Client", "TCM"],
     ["Directors", "David Byrne · Christian Hammann"],
@@ -238,31 +240,37 @@ const P = {
   ],
   days: [
     { name: "Pre-light", date: "Wed, Nov 18, 2026", status: "confirmed", call: "8:00 AM", loc: "Techwood Studios, Studio C · Gate #2", notes: "Assemble the Switch. Light the Switch, spotlight and practicals; load and test the 9216×2048 wall content for each chapter." },
-    { name: "Shoot day", date: "Thu, Nov 19, 2026", status: "confirmed", call: "8:00 AM", loc: "Techwood Studios, Studio C · Gate #2", notes: "Full schedule below (Version 2). Open and endings first, Angel face swap mid-morning, chapters after lunch.", glance: true }
+    { name: "Shoot day", date: "Thu, Nov 19, 2026", status: "confirmed", call: "8:00 AM", loc: "Techwood Studios, Studio C · Gate #2", notes: "Full schedule below (Version 3). Open and endings first with the Angel swap mid-morning, Chapters 1–2 before lunch, the rest after, then b-roll and a clean-screen pass.", glance: true }
   ],
   schedule: {
-    version: "Version 2",
+    version: "Version 3",
     date: "Thu, Nov 19, 2026",
-    glance: [["7:00 AM", "Production call"], ["7:30 AM", "Breakfast RTS"], ["8:00 AM", "Crew / client call"], ["8:45 AM", "Shooting call"], ["12:45–1:45 PM", "Lunch"], ["6:00 PM", "Camera wrap"], ["7:00 PM", "Tail-lights"]],
+    glance: [["7:00 AM", "Production call"], ["7:30 AM", "Breakfast RTS"], ["8:00 AM", "Crew / client call"], ["8:30 AM", "Shooting call"], ["1:00–2:00 PM", "Lunch"], ["6:00 PM", "Camera wrap"], ["7:00 PM", "Tail-lights"]],
+    lunchNote: "The header of Version 3 lists lunch at 12:30–1:30 PM, but the timeline places it at 1:00–2:00 PM, after Chapter 2. The site follows the timeline.",
     blocks: [
       { t: "8:00 AM", d: "", title: "Crew call / safety meeting", kind: "ops" },
-      { t: "8:00–8:45 AM", d: "45 min", title: "Crew setup", kind: "ops" },
-      { t: "8:45–9:30 AM", d: "45 min", title: "Opening", sub: "Slow pull-back from the LED wall (Times Square 1994 archival) to reveal the Switch in the foreground. Framing: wide, reveal.", face: "switch", led: "Archival: Times Square 1994 TCM launch, images and footage · Ted Turner · Ann Blyth", img: "img/sched/open.jpg", shot: 1 },
-      { t: "9:30–10:00 AM", d: "30 min", title: "Ending", sub: "Robert Duvall · Photo Wall · TCM Remembers Logo", face: "switch", led: "Robert Duvall / Photo Wall / TCM Remembers Logo", img: "img/sched/ending.jpg", shot: 2 },
-      { t: "10:00–10:30 AM", d: "30 min", title: "Ending Alt 1", sub: "Robert Duvall · Photo Wall · Clean Video Backplate", face: "switch", led: "Robert Duvall / Photo Wall / Clean Video Backplate", img: "img/sched/ending.jpg", shot: 3 },
-      { t: "10:30–11:00 AM", d: "30 min", title: "Replace TCM Switch with TCM Remembers Angel", kind: "swap" },
-      { t: "11:00–11:45 AM", d: "45 min", title: "Ending Alt 2", sub: "Robert Duvall · Photo Wall · TCM Remembers Logo", face: "angel", led: "Robert Duvall / Photo Wall / TCM Remembers Logo", img: "img/sched/ending.jpg", shot: 4 },
-      { t: "11:45 AM–12:15 PM", d: "30 min", title: "Ending Alt 3", sub: "Robert Duvall · Photo Wall · Clean Video Backplate", face: "angel", led: "Robert Duvall / Photo Wall / Clean Video Backplate", img: "img/sched/ending.jpg", shot: 5 },
+      { t: "8:00–8:30 AM", d: "30 min", title: "Crew setup", kind: "ops" },
+      { t: "8:30–9:15 AM", d: "45 min", title: "Opening", sub: "Slow pull-back from the LED wall (Times Square 1994 archival) to reveal the Switch in the foreground. Framing: wide, reveal.", face: "switch", led: "Archival: Times Square 1994 TCM launch, images and footage · Ted Turner · Ann Blyth", img: "img/sched/open.jpg", shot: 1 },
+      { t: "9:15–9:45 AM", d: "30 min", title: "Ending", sub: "Robert Duvall · Photo Wall · TCM Remembers Logo", face: "switch", led: "Robert Duvall / Photo Wall / TCM Remembers Logo", img: "img/sched/ending.jpg", shot: 2 },
+      { t: "9:45–10:15 AM", d: "30 min", title: "Ending Alt 1", sub: "Robert Duvall · Photo Wall · Clean Video Backplate", face: "switch", led: "Robert Duvall / Photo Wall / Clean Video Backplate", img: "img/sched/alt1.jpg", shot: 3 },
+      { t: "10:15–10:30 AM", d: "15 min", title: "Replace TCM Switch with TCM Remembers Angel", kind: "swap" },
+      { t: "10:30–11:15 AM", d: "45 min", title: "Ending Alt 2", sub: "Robert Duvall · Photo Wall · TCM Remembers Logo", face: "angel", led: "Robert Duvall / Photo Wall / TCM Remembers Logo", img: "img/sched/alt2.jpg", shot: 4 },
+      { t: "11:15–11:45 AM", d: "30 min", title: "Ending Alt 3", sub: "Robert Duvall · Photo Wall · Clean Video Backplate", face: "angel", led: "Robert Duvall / Photo Wall / Clean Video Backplate", img: "img/sched/alt3.jpg", shot: 5 },
       { t: "", d: "", title: "Chapter 7 (rolls into Ending)", sub: "Christa Lang · Keiko Keisha · Eva Marie Saint · Robert Duvall", face: "angel", led: "Christa Lang · Keiko Keisha · Eva Marie Saint · Robert Duvall", notes: "May be married to the beginning of the Ending video for a more seamless transition from Robert Duvall. If so, Chapter 7 is captured rolling into the Ending as one video element.", img: "img/sched/ch7.jpg", shot: 6 },
-      { t: "12:15–12:45 PM", d: "30 min", title: "Replace TCM Remembers Angel with TCM Switch", kind: "swap" },
-      { t: "12:45–1:45 PM", d: "1 hr", title: "Lunch", kind: "meal" },
-      { t: "1:45–2:30 PM", d: "45 min", title: "Chapter 1", sub: "Joy Harmon · Bud Cort · Dragonslayer", face: "switch", led: "Joy Harmon · Bud Cort · Dragonslayer", img: "img/sched/ch1.jpg", shot: 7 },
-      { t: "2:30–3:00 PM", d: "30 min", title: "Chapter 2", sub: "2001 · Star Trek · Patrick Stewart · Star Wars", face: "switch", led: "2001 · Star Trek · Patrick Stewart · Star Wars", img: "img/sched/ch2.jpg", shot: 8 },
-      { t: "3:00–3:30 PM", d: "30 min", title: "Chapter 3", sub: "Glenn Hansard · Dolly Parton · Starry Sky", face: "switch", led: "Glenn Hansard · Dolly Parton · Starry Sky", img: "img/sched/ch3.jpg", shot: 9 },
-      { t: "3:30–4:00 PM", d: "30 min", title: "Chapter 6", sub: "Terminator 2 · Sam Neill · Tom Skeritt · Mary Beth Hurt", face: "switch", led: "Terminator 2 · Sam Neill · Tom Skeritt · Mary Beth Hurt", img: "img/sched/ch6.jpg", shot: 10 },
-      { t: "4:00–4:30 PM", d: "30 min", title: "Chapter 4", sub: "Robin Hood · Catherine O’Hara · Garrett Graham · Tim Curry", face: "switch", led: "Robin Hood · Catherine O’Hara · Garrett Graham · Tim Curry", img: "img/sched/ch4.jpg", shot: 11 },
-      { t: "4:30–5:15 PM", d: "45 min", title: "Chapter 5 (photos, then videos)", sub: "Photos: Rex Reed · Gene Shalit · Judith Wyler Sheldon · John Bengston · Casey Lalonde. Videos: Fred Wiseman", face: "switch", led: "Photo section, then Fred Wiseman video section", img: "img/sched/ch5.jpg", shot: 12 },
-      { t: "5:15–6:00 PM", d: "45 min", title: "B-Roll (time permitting)", sub: "Tighter detail shots of the TCM Switch sign", face: "switch", led: "Beam, Bokeh", notes: "Look for organic, magical moments to use as transitional and texture elements.", img: "img/sched/broll.jpg", shot: 13 },
+      { t: "11:45 AM–12:00 PM", d: "15 min", title: "Replace TCM Remembers Angel with TCM Switch", kind: "swap" },
+      { t: "12:00–12:30 PM", d: "30 min", title: "Chapter 1", sub: "Joy Harmon · Bud Cort · Dragonslayer", face: "switch", led: "Joy Harmon · Bud Cort · Dragonslayer", img: "img/sched/ch1.jpg", shot: 7 },
+      { t: "12:30–1:00 PM", d: "30 min", title: "Chapter 2", sub: "2001 · Star Trek · Patrick Stewart · Star Wars", face: "switch", led: "2001 · Star Trek · Patrick Stewart · Star Wars", img: "img/sched/ch2.jpg", shot: 8 },
+      { t: "1:00–2:00 PM", d: "1 hr", title: "Lunch", kind: "meal" },
+      { t: "2:00–2:30 PM", d: "30 min", title: "Chapter 3", sub: "Glenn Hansard · Dolly Parton · Starry Sky", face: "switch", led: "Glenn Hansard · Dolly Parton · Starry Sky", notes: "Alt with background shifted for seam.", img: "img/sched/ch3.jpg", shot: 9 },
+      { t: "2:30–3:00 PM", d: "30 min", title: "Chapter 6", sub: "Terminator 2 · Sam Neill · Tom Skeritt · Mary Beth Hurt", face: "switch", led: "Terminator 2 · Sam Neill · Tom Skeritt · Mary Beth Hurt", img: "img/sched/ch6.jpg", shot: 10 },
+      { t: "3:00–3:30 PM", d: "30 min", title: "Chapter 4", sub: "Robin Hood · Catherine O’Hara · Garrett Graham · Tim Curry", face: "switch", led: "Robin Hood · Catherine O’Hara · Garrett Graham · Tim Curry", img: "img/sched/ch4.jpg", shot: 11 },
+      { t: "3:30–4:00 PM", d: "30 min", title: "Chapter 5 (photos)", sub: "Rex Reed · Gene Shalit · Judith Wyler Sheldon · John Bengston · Casey Lalonde", face: "switch", led: "Rex Reed · Gene Shalit · Judith Wyler Sheldon · John Bengston · Casey Lalonde", img: "img/sched/ch5.jpg", shot: 12 },
+      { t: "", d: "", title: "Chapter 5 (videos)", sub: "Video section: Fred Wiseman", face: "switch", led: "Fred Wiseman", img: "img/sched/ch5v.jpg", shot: 12, tlabel: "Follows photos" },
+      { t: "4:00–5:00 PM", d: "1 hr", title: "B-Roll with TCM Switch", sub: "Tighter detail shots of the TCM Switch sign", face: "switch", led: "Beam, Bokeh", notes: "Look for organic, magical moments to use as transitional and texture elements.", img: "img/sched/broll.jpg", shot: 13 },
+      { t: "", d: "", title: "Time permitting: replace TCM Switch with TCM Remembers Angel", kind: "swap" },
+      { t: "", d: "", title: "B-Roll with TCM Remembers Angel (time permitting)", sub: "Tighter detail shots of the TCM Remembers Angel", face: "angel", led: "Beam, Bokeh", notes: "Look for organic, magical moments to use as transitional and texture elements.", img: "img/sched/broll.jpg", tlabel: "Time permitting" },
+      { t: "5:00–5:15 PM", d: "15 min", title: "Remove TCM Switch (or Remembers Angel) and lights for clean screen", kind: "swap" },
+      { t: "5:15–6:00 PM", d: "45 min", title: "Clean screen, no foreground elements", sub: "Wall only, without the TCM Switch and uplights.", led: "All clips", tlabel: "" },
       { t: "6:00–7:00 PM", d: "1 hr", title: "Camera wrap", kind: "ops" },
       { t: "7:00 PM", d: "", title: "Crew wrap", kind: "ops" }
     ],
@@ -273,7 +281,7 @@ const P = {
       ["Designer", "Chris Brooks"],
       ["Sr. Director of Production", "Julie Bitton"],
       ["Production Coordinator", "Emma Morris"],
-      ["Executive Producer (OGD Productions)", "Mario Rials"]
+      ["Executive Producer (OGD Creative)", "Mario Rials"]
     ]
   },
   story: [
@@ -307,13 +315,13 @@ const P = {
     note: "Listed in shooting order. Each row is one LED wall video element; the Switch sits in the foreground throughout.",
     faces: { switch: "TCM Switch", angel: "TCM Remembers Angel" },
     shots: [
-      { sec: "Open", title: "Open · “Chapter 00”", wall: ["Ted Turner", "Ann Blyth"], notes: "Aiming for a pull-back reveal to the TCM Switch in the foreground.", face: "switch", faceNote: "Confirmed on Schedule V2" },
+      { sec: "Open", title: "Open · “Chapter 00”", wall: ["Ted Turner", "Ann Blyth"], notes: "Aiming for a pull-back reveal to the TCM Switch in the foreground.", face: "switch", faceNote: "Confirmed on Schedule V3" },
       { sec: "Ending", title: "Ending", wall: ["Robert Duvall", "Photo Wall", "TCM Remembers Logo"], face: "switch" },
       { sec: "Ending", title: "Ending Alt #1", wall: ["Robert Duvall", "Photo Wall", "Clean Video Backplate"], face: "switch" },
       { sec: "Ending", title: "Ending Alt #2", wall: ["Robert Duvall", "Photo Wall", "TCM Remembers Logo"], face: "angel", faceNote: "Swap: TCM Switch out, TCM Remembers Angel in", swap: true },
       { sec: "Ending", title: "Ending Alt #3", wall: ["Robert Duvall", "Photo Wall", "Clean Backplate"], face: "angel" },
-      { sec: "Chapters", title: "Chapter 7", wall: ["Christa Lang", "Keiko Keisha", "Eva Marie Saint", "Robert Duvall"], notes: "May be married to the beginning of the Ending video for a more seamless transition from Robert Duvall. If so, Chapter 7 is captured rolling into the Ending as one video element.", face: "angel", faceNote: "Confirmed on Schedule V2" },
-      { sec: "Chapters", title: "Chapter 1", wall: ["Joy Harmon", "Bud Cort", "Dragonslayer"], face: "switch", faceNote: "Swap: Angel out, TCM Switch in. Angel face retires for the rest of the shoot.", swap: true },
+      { sec: "Chapters", title: "Chapter 7", wall: ["Christa Lang", "Keiko Keisha", "Eva Marie Saint", "Robert Duvall"], notes: "May be married to the beginning of the Ending video for a more seamless transition from Robert Duvall. If so, Chapter 7 is captured rolling into the Ending as one video element.", face: "angel", faceNote: "Confirmed on Schedule V3" },
+      { sec: "Chapters", title: "Chapter 1", wall: ["Joy Harmon", "Bud Cort", "Dragonslayer"], face: "switch", faceNote: "Swap: Angel out, TCM Switch in. Per Schedule V3, the Angel may return for b-roll, time permitting.", swap: true },
       { sec: "Chapters", title: "Chapter 2", wall: ["2001", "Star Trek", "Patrick Stewart", "Star Wars"], face: "switch" },
       { sec: "Chapters", title: "Chapter 3", wall: ["Glenn Hansard", "Dolly Parton", "Starry Sky"], face: "switch" },
       { sec: "Chapters", title: "Chapter 6", wall: ["Terminator 2", "Sam Neill", "Tom Skeritt", "Mary Beth Hurt"], face: "switch" },
@@ -422,7 +430,7 @@ const P = {
     ["Lighting", "Lighting Director", "Lachlan Smith", "confirmed"],
     ["Electric", "Gaffer", "Chris Sorel", "confirmed"],
     ["Electric", "Best Boy Electric", "Greg Taylor", "confirmed"],
-    ["Grip", "Key Grip", "Mike Coskey", "confirmed"],
+    ["Grip", "Key Grip", "Mike Cosky", "confirmed"],
     ["Grip", "Best Boy Grip", "Stephen Dragstedt", "confirmed"],
     ["Art", "Production Designer", "LA Reagan-Barnes", "confirmed"],
     ["Art", "Art Assistant", "Jessie Simpson", "confirmed"],
@@ -437,7 +445,7 @@ const P = {
     ["Honoree list (final)", "TCM", "tbd"],
     ["TCM Remembers 2026 Shot List V1", "11/13/26 · 13 shots incl. open, ending + 3 alts, 7 chapters, b-roll", "confirmed"],
     ["LED content / edit plan", "Post", "tbd"],
-    ["TCM Remembers 2026 Schedule, Version 2", "Shoot day Nov 19 · 4 pp · Nov 17, 2026", "confirmed"],
+    ["TCM Remembers 2026 Schedule, Version 3", "Shoot day Nov 19 · 4 pp · Nov 18, 2026 (replaces Version 2)", "confirmed"],
     ["Call sheet", "Production", "tbd"]
   ]
 };
@@ -466,11 +474,12 @@ const sections = [
         ${d.glance ? `<div class="blocks">${P.schedule.glance.map(g => `<div class="blk"><span class="mono">${esc(g[0])}</span><span>${esc(g[1])}</span></div>`).join("")}</div>` : ""}
       </div>`).join("")}</div>
     <div class="sec-head" style="margin-top:28px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><h2>Shoot day schedule</h2><span class="pill confirmed">${esc(P.schedule.version)} · ${esc(P.schedule.date)}</span></div>
+    ${P.schedule.lunchNote ? `<div class="callout wine" style="margin-bottom:12px">${esc(P.schedule.lunchNote)}</div>` : ""}
     <div class="sched">${P.schedule.blocks.map(b => b.kind ? `
       <div class="srow ${b.kind}"><div class="stime mono">${esc(b.t)}${b.d ? `<small>${esc(b.d)}</small>` : ""}</div><div class="stitle">${b.kind === "swap" ? "⇄ " : ""}${esc(b.title)}</div></div>` : `
-      <div class="srow shoot"><div class="stime mono">${b.t ? esc(b.t) : '<span class="placeholder">Rolls into Ending</span>'}${b.d ? `<small>${esc(b.d)}</small>` : ""}</div>
-        <button type="button" class="sthumb" data-set="sched" data-i="${P.schedule.blocks.filter(x => x.img).indexOf(b)}" aria-label="Open ${esc(b.title)} frame"><img src="${b.img}" alt="${esc(b.title)} reference frame" loading="lazy"></button>
-        <div class="sbody"><div class="day-top" style="justify-content:flex-start;gap:10px;flex-wrap:wrap"><h3>${esc(b.title)}</h3><span class="face ${b.face}">${esc(P.shotList.faces[b.face])}</span><span class="sec-note mono">Shot ${String(b.shot).padStart(2, "0")}</span></div>
+      <div class="srow shoot"><div class="stime mono">${b.t ? esc(b.t) : `<span class="placeholder">${esc(b.tlabel ?? "Rolls into Ending")}</span>`}${b.d ? `<small>${esc(b.d)}</small>` : ""}</div>
+        ${b.img ? `<button type="button" class="sthumb" data-set="sched" data-i="${P.schedule.blocks.filter(x => x.img).indexOf(b)}" aria-label="Open ${esc(b.title)} frame"><img src="${b.img}" alt="${esc(b.title)} reference frame" loading="lazy"></button>` : `<div class="sthumb empty">No foreground</div>`}
+        <div class="sbody"><div class="day-top" style="justify-content:flex-start;gap:10px;flex-wrap:wrap"><h3>${esc(b.title)}</h3>${b.face ? `<span class="face ${b.face}">${esc(P.shotList.faces[b.face])}</span>` : `<span class="face none">No sign</span>`}${b.shot ? `<span class="sec-note mono">Shot ${String(b.shot).padStart(2, "0")}</span>` : ""}</div>
           <p>${esc(b.sub)}</p>
           <dl class="kv" style="margin-top:6px"><dt>LED</dt><dd>${esc(b.led)}</dd>${b.notes ? `<dt>Notes</dt><dd>${esc(b.notes)}</dd>` : ""}</dl></div></div>`).join("")}</div>
     <h3 style="margin:22px 0 8px">Key contacts on the schedule</h3>
@@ -578,7 +587,7 @@ document.getElementById("main").innerHTML = sections.map(([id, label, fn]) => `
     <div class="sec-head"><h2>${label}</h2></div>
     ${fn()}
   </section>`).join("");
-document.getElementById("footer").textContent = `Last updated ${P.updated} · Sources: TCM Remembers Creative Deck V2 (David Byrne, Christian Hammann); Shot List V1 (11/13/26); Schedule Version 2; location and studio specs from the TCM Wine Club 2026 production site.`;
+document.getElementById("footer").textContent = `Last updated ${P.updated} · Sources: TCM Remembers Creative Deck V2 (David Byrne, Christian Hammann); Shot List V1 (11/13/26); Schedule Version 3; location and studio specs from the TCM Wine Club 2026 production site.`;
 
 let slG = "All", slF = "all";
 function renderShots() {
